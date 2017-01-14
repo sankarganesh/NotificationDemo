@@ -36,8 +36,8 @@ public class NotificationService extends Service {
 		 */
 		Intent intent1 = new Intent(this.getApplicationContext(), MyView.class);
 
-		Notification notification = new Notification(R.drawable.ic_launcher,
-				"See My App something for you", System.currentTimeMillis());
+		/*Notification notification = new Notification(R.drawable.ic_launcher,
+				"See My App something for you", System.currentTimeMillis());*/
 
 		intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
 				| Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -46,13 +46,27 @@ public class NotificationService extends Service {
 				this.getApplicationContext(), 0, intent1,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		// SetLatestEventInfo is depricated
+		/*notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		notification.setLatestEventInfo(this.getApplicationContext(),
 				"SANBOOK", "See My App something for you",
-				pendingNotificationIntent);
+				pendingNotificationIntent);*/
+		Notification.Builder builder = new Notification.Builder(this.getApplicationContext());
+		builder.setAutoCancel(false);
+		builder.setTicker("Some Task");
+		builder.setContentTitle("ToDo Task");
+		builder.setContentText("You have a new message");
+		builder.setSmallIcon(R.drawable.ic_notification);
+		builder.setContentIntent(pendingNotificationIntent);
+		builder.setOngoing(true);
+		builder.setSubText("This is subtext..."); //API level 16 and above
+		builder.setNumber(100);
+		builder.build();
 
-		mManager.notify(0, notification);
+		Notification myNotication = builder.getNotification();
+
+		mManager.notify(0, myNotication);
 	}
 
 	@Override
